@@ -1,0 +1,16 @@
+/target/
+/test/
+/.idea/
+/.vscode/
+/lib/
+**/*.rs.bk
+.DS_Store
+*.dll
+*.lock
+*log*
+*.exe
+*.pdb
+*.dll
+*.nes
+*.efi
+*.code-workspace

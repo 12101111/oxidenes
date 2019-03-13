@@ -1,0 +1,22 @@
+[package]
+name = "oxidenes"
+version = "0.1.0"
+description = "A NES emulator."
+keywords = ["emulator", "nes", "6502"]
+license = "MIT"
+authors = ["韩朴宇 <w12101111@gmail.com>"]
+repository = "https://github.com/12101111/oxidenes"
+homepage = "https://github.com/12101111/oxidenes"
+edition = "2018"
+
+[dependencies]
+mos6502 = { git = "https://github.com/12101111/6502"}
+bitflags = "1"
+log = { version = "0.4", default-features = false }
+
+[features]
+disasm = ["mos6502/disasm"] 
+
+[[example]]
+name = "nestest"
+required-features = ["disasm"]
