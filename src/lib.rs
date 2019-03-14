@@ -10,24 +10,28 @@ mod input;
 mod mapper;
 mod ppu;
 mod rom;
-#[macro_use]
-mod utils;
 
 use apu::APU;
 use input::Input;
 use mapper::PRG;
 use ppu::PPU;
+pub use ppu::{Screen, SCREEN_HEIGHT, SCREEN_WIDTH};
 use rom::Rom;
 
-pub struct NES<'a> {
+pub struct NES<'a, S: Screen> {
     cpu: CPU<NESMemory<'a>>,
+    screen: S,
 }
 
-impl<'a> NES<'a> {
-    pub fn new(buffer: &'a [u8]) -> NES<'a> {
+impl<'a, S: Screen> NES<'a, S> {
+    pub fn new(buffer: &'a [u8], screen: S) -> NES<'a, S> {
         let mem = NESMemory::new(buffer);
-        NES { cpu: CPU::new(mem) }
+        NES {
+            cpu: CPU::new(mem),
+            screen,
+        }
     }
+    #[cfg(feature = "disasm")]
     pub fn step(&mut self) {
         self.cpu.execute();
     }
@@ -35,6 +39,7 @@ impl<'a> NES<'a> {
     pub fn set_pc(&mut self, pc: u16) {
         self.cpu.regs.pc = pc;
     }
+    #[cfg(feature = "disasm")]
     pub fn get_cycles(&self) -> usize {
         self.cpu.mem.get_cycles()
     }
@@ -64,7 +69,8 @@ struct NESMemory<'a> {
 impl<'a> Memory for NESMemory<'a> {
     fn reset(&mut self) {
         self.ram = [0; 0x800];
-        self.ppu.reset();
+        // NES don't reset PPU when reset
+        //self.ppu.reset();
         self.apu.reset();
         self.input.reset();
         self.cycles = 7;
