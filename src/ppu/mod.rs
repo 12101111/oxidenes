@@ -35,7 +35,7 @@ pub struct PPU<'a> {
     /// Post-render scanline (240) 1行VBlank开始
     /// Vertical blanking lines (241-260) 20行的VBlank线.
     pub scanline: u16,
-    pub cycle: usize,
+    pub cycles: usize,
 }
 
 impl<'a> PPU<'a> {
@@ -70,7 +70,7 @@ impl<'a> PPU<'a> {
             palette: Palette::new(),
             oam: [0u8; 0x100],
             scanline: 0,
-            cycle: 0,
+            cycles: 0,
         }
     }
 }
